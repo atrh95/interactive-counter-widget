@@ -1,8 +1,10 @@
 import SwiftUI
-import ICUserDefaultsManager
+import WidgetKit
 
 struct ContentView: View {
-    @StateObject private var counter = CounterFeature()
+    // App Group 共有の UserDefaults を直接バインドし、Widget や他プロセスでの変更をリアルタイム反映
+    @AppStorage("counter_value", store: UserDefaults(suiteName: "group.com.akitorahayashi.InterCounter"))
+    private var count: Int = 0
     
     var body: some View {
         GeometryReader { geometry in
@@ -10,29 +12,35 @@ struct ContentView: View {
                 Spacer()
                 HStack(spacing: 50) {
                     Button {
-                        counter.decrement()
+                        if count > 0 {
+                            count -= 1
+                            WidgetCenter.shared.reloadTimelines(ofKind: "InteractiveCounterWidget")
+                        }
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(counter.count <= 0 ? .gray : .accentColor)
+                            .foregroundColor(count <= 0 ? .gray : .accentColor)
                             .frame(width: 60, height: 60)
                     }
-                    .disabled(counter.count <= 0)
+                    .disabled(count <= 0)
 
-                    Text("\(counter.count)")
+                    Text("\(count)")
                         .font(.system(size: 32, weight: .bold))
                         .foregroundColor(.gray)
                         .frame(height: 40)
 
                     Button {
-                        counter.increment()
+                        if count < 50 {
+                            count += 1
+                            WidgetCenter.shared.reloadTimelines(ofKind: "InteractiveCounterWidget")
+                        }
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(counter.count >= 50 ? .gray : .accentColor)
+                            .foregroundColor(count >= 50 ? .gray : .accentColor)
                             .frame(width: 60, height: 60)
                     }
-                    .disabled(counter.count >= 50)
+                    .disabled(count >= 50)
                 }
                 Spacer()
             }
