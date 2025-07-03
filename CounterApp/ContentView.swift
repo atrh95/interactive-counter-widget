@@ -2,53 +2,44 @@ import SwiftUI
 import ICUserDefaultsManager
 
 struct ContentView: View {
-    @StateObject private var counter = ICUserDefaultsManager.shared
+    @StateObject private var counter = CounterFeature()
     
     var body: some View {
-        VStack(spacing: 30) {
-            Text("Counter App")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text("\(counter.count)")
-                .font(.system(size: 80, weight: .bold, design: .rounded))
-                .foregroundColor(.blue)
-            
-            HStack(spacing: 20) {
-                Button("-") {
-                    counter.decrement()
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                HStack(spacing: 50) {
+                    Button {
+                        counter.decrement()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(counter.count <= 0 ? .gray : .accentColor)
+                            .frame(width: 60, height: 60)
+                    }
+                    .disabled(counter.count <= 0)
+
+                    Text("\(counter.count)")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.gray)
+                        .frame(height: 40)
+
+                    Button {
+                        counter.increment()
+                    } label: {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(counter.count >= 50 ? .gray : .accentColor)
+                            .frame(width: 60, height: 60)
+                    }
+                    .disabled(counter.count >= 50)
                 }
-                .font(.title)
-                .frame(width: 60, height: 60)
-                .background(Color.red)
-                .foregroundColor(.white)
-                .clipShape(Circle())
-                
-                Button("Reset") {
-                    counter.reset()
-                }
-                .font(.title3)
-                .frame(width: 80, height: 60)
-                .background(Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-                
-                Button("+") {
-                    counter.increment()
-                }
-                .font(.title)
-                .frame(width: 60, height: 60)
-                .background(Color.green)
-                .foregroundColor(.white)
-                .clipShape(Circle())
+                Spacer()
             }
-            
-            Text("ウィジェットからカウンターを操作できます")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+            .frame(width: geometry.size.width, height: 120)
         }
-        .padding()
+        .frame(height: 120)
+            .navigationTitle("Counter")
     }
 }
 
