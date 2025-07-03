@@ -1,12 +1,12 @@
-import WidgetKit
-import SwiftUI
 import AppIntents
+import SwiftUI
+import WidgetKit
 
 struct InteractiveCounterWidget: Widget {
     let kind: String = "InteractiveCounterWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: ICWProvider()) { entry in
+        StaticConfiguration(kind: self.kind, provider: ICWProvider()) { entry in
             CounterWidgetView(entry: entry)
         }
         .configurationDisplayName("Interactive Counter")

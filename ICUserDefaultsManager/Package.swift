@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "ICUserDefaultsManager",
     platforms: [
-        .iOS(.v17)
+        .iOS(.v17),
     ],
     products: [
         // 公開するモジュールを定義
@@ -27,4 +27,4 @@ let package = Package(
             path: "Sources/ICUserDefaultsManager"
         ),
     ]
-) 
+)

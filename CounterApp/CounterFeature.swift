@@ -5,32 +5,32 @@ import WidgetKit
 @MainActor
 class CounterFeature: ObservableObject {
     @Published private(set) var count: Int = 0
-    
+
     private let userDefaultsManager: ICUserDefaultsManager
-    
+
     init(userDefaultsManager: ICUserDefaultsManager = .shared) {
         self.userDefaultsManager = userDefaultsManager
         self.count = userDefaultsManager.getValue(for: .counterValue)
     }
-    
+
     func increment() {
-        guard count < 50 else { return }
-        count += 1
-        saveCount()
+        guard self.count < 50 else { return }
+        self.count += 1
+        self.saveCount()
     }
-    
+
     func decrement() {
-        guard count > 0 else { return }
-        count -= 1
-        saveCount()
+        guard self.count > 0 else { return }
+        self.count -= 1
+        self.saveCount()
     }
-    
+
     func reloadFromUserDefaults() {
-        count = userDefaultsManager.getValue(for: .counterValue)
+        self.count = self.userDefaultsManager.getValue(for: .counterValue)
     }
-    
+
     private func saveCount() {
-        userDefaultsManager.setValue(count, for: .counterValue)
+        self.userDefaultsManager.setValue(self.count, for: .counterValue)
         WidgetCenter.shared.reloadTimelines(ofKind: "InteractiveCounterWidget")
     }
-} 
+}
