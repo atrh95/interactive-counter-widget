@@ -1,7 +1,8 @@
 import SwiftUI
+import ICUserDefaultsManager
 
 struct ContentView: View {
-    @StateObject private var counter = SharedCounter.shared
+    @StateObject private var counter = ICUserDefaultsManager.shared
     
     var body: some View {
         VStack(spacing: 30) {

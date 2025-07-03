@@ -28,8 +28,11 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      - name: Generate Xcode Project
-        run: mint run xcodegen generate
+      - name: Make setup script executable
+        run: chmod +x setup.sh
+
+      - name: Setup Project
+        run: ./setup.sh
 
       - name: Make find-simulator script executable
         run: chmod +x .github/scripts/find-simulator.sh
@@ -97,8 +100,11 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      - name: Generate Xcode Project
-        run: mint run xcodegen generate
+      - name: Make setup script executable
+        run: chmod +x setup.sh
+
+      - name: Setup Project
+        run: ./setup.sh
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -163,8 +169,11 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      - name: Generate Xcode Project
-        run: mint run xcodegen generate
+      - name: Make setup script executable
+        run: chmod +x setup.sh
+
+      - name: Setup Project
+        run: ./setup.sh
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4

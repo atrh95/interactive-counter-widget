@@ -1,6 +1,7 @@
 import WidgetKit
 import SwiftUI
 import AppIntents
+import ICUserDefaultsManager
 
 // Widgetの表示データ構造
 struct CounterEntry: TimelineEntry {
@@ -27,8 +28,11 @@ struct CounterProvider: TimelineProvider {
     }
     
     private func getCurrentCount() -> Int {
-        let userDefaults = UserDefaults(suiteName: "group.com.akitorahayashi.InteractiveCounterApp") ?? UserDefaults.standard
-        return userDefaults.integer(forKey: "counter_value")
+        guard let userDefaults = UserDefaults(suiteName: "group.com.akitorahayashi.InterCounter") else {
+            assertionFailure("App Group 'group.com.akitorahayashi.InterCounter' にアクセスできません")
+            return 0
+        }
+        return userDefaults.integer(forKey: ICUserDefaultsManager.Keys.counterValue.rawValue)
     }
 }
 

@@ -1,5 +1,6 @@
 import AppIntents
 import Foundation
+import ICUserDefaultsManager
 
 // カウンターを増加させるIntent
 struct IncrementCounterIntent: AppIntent {
@@ -7,7 +8,7 @@ struct IncrementCounterIntent: AppIntent {
     static var description = IntentDescription("Increments the counter by 1")
     
     func perform() async throws -> some IntentResult {
-        let counter = SharedCounter.shared
+        let counter = ICUserDefaultsManager.shared
         counter.increment()
         return .result()
     }
@@ -19,7 +20,7 @@ struct DecrementCounterIntent: AppIntent {
     static var description = IntentDescription("Decrements the counter by 1")
     
     func perform() async throws -> some IntentResult {
-        let counter = SharedCounter.shared
+        let counter = ICUserDefaultsManager.shared
         counter.decrement()
         return .result()
     }
@@ -31,7 +32,7 @@ struct ResetCounterIntent: AppIntent {
     static var description = IntentDescription("Resets the counter to 0")
     
     func perform() async throws -> some IntentResult {
-        let counter = SharedCounter.shared
+        let counter = ICUserDefaultsManager.shared
         counter.reset()
         return .result()
     }

@@ -31,8 +31,11 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      - name: Generate Xcode Project
-        run: mint run xcodegen generate
+      - name: Make setup script executable
+        run: chmod +x setup.sh
+
+      - name: Setup Project
+        run: ./setup.sh
 
       - name: Build Release Version (Unsigned)
         run: |

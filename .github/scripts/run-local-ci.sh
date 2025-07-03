@@ -11,10 +11,10 @@ set -euo pipefail
 
 # === Configuration ===
 OUTPUT_DIR="ci-outputs"
-PROJECT_FILE="CounterApp.xcodeproj"
-APP_SCHEME="CounterApp"
-UNIT_TEST_SCHEME="CounterAppTests"
-UI_TEST_SCHEME="CounterAppUITests"
+PROJECT_FILE="TemplateApp.xcodeproj"
+APP_SCHEME="TemplateApp"
+UNIT_TEST_SCHEME="TemplateAppTests"
+UI_TEST_SCHEME="TemplateAppUITests"
 
 # === Default Flags ===
 run_unit_tests=false
@@ -102,6 +102,16 @@ fail() {
   exit 1
 }
 
+# xcodeprojを必要に応じて生成する関数
+ensure_project_file() {
+  # プロジェクトファイルが存在しない場合は自動生成
+  if [ ! -d "$PROJECT_FILE" ]; then
+    step "Generating Xcode project using XcodeGen"
+    mint run xcodegen || fail "XcodeGen によるプロジェクト生成に失敗しました。"
+    success "Xcode project generated successfully."
+  fi
+}
+
 # アーティファクト検索関数
 find_existing_artifacts() {
   local search_paths=(
@@ -114,8 +124,8 @@ find_existing_artifacts() {
   
   for path in "${search_paths[@]}"; do
     if [ -d "$path" ]; then
-      # findを使ってCounterApp.appを検索
-      if find "$path" -name "CounterApp.app" -type d | head -1 | grep -q "CounterApp.app"; then
+      # findを使ってTemplateApp.appを検索
+      if find "$path" -name "TemplateApp.app" -type d | head -1 | grep -q "TemplateApp.app"; then
         echo "Found existing build artifacts at: $path"
         # シンボリックリンクまたはコピーでアーティファクトを利用可能にする
         if [ "$path" != "$OUTPUT_DIR/test-results/DerivedData" ]; then
@@ -176,37 +186,9 @@ fi
 
 success "All required dependencies are available."
 
-# === XcodeGen ===
-# プロジェクト生成 (アーカイブ時 or ビルドを伴うテスト実行時)
-if [[ "$skip_build_for_testing" = false && ( "$run_archive" = true || "$run_unit_tests" = true || "$run_ui_tests" = true ) ]]; then
-  step "Generating Xcode project using XcodeGen"
-  # xcodegen の存在確認 (なければ bootstrap)
-  if ! mint list | grep -q 'XcodeGen'; then
-      echo "mint で XcodeGen が見つかりません。'mint bootstrap' を実行します..."
-      mint bootstrap || fail "mint パッケージの bootstrap に失敗しました。"
-  fi
-  echo "Running xcodegen..."
-  mint run xcodegen || fail "XcodeGen によるプロジェクト生成に失敗しました。"
-  # プロジェクトファイルの存在確認
-  if [ ! -d "$PROJECT_FILE" ]; then
-    fail "XcodeGen 実行後、プロジェクトファイル '$PROJECT_FILE' が見つかりません。"
-  fi
-  success "Xcode project generated successfully."
-elif [ "$skip_build_for_testing" = true ]; then
-  # test-without-buildingの場合もプロジェクトファイルは必要
-  if [ ! -d "$PROJECT_FILE" ]; then
-    step "Generating Xcode project for test-without-building"
-    if ! mint list | grep -q 'XcodeGen'; then
-        echo "mint で XcodeGen が見つかりません。'mint bootstrap' を実行します..."
-        mint bootstrap || fail "mint パッケージの bootstrap に失敗しました。"
-    fi
-    echo "Running xcodegen..."
-    mint run xcodegen || fail "XcodeGen によるプロジェクト生成に失敗しました。"
-    success "Xcode project generated for testing."
-  fi
-fi
-
 if [ "$run_unit_tests" = true ] || [ "$run_ui_tests" = true ]; then
+  # テスト実行時にプロジェクトファイルを確認
+  ensure_project_file
   step "Running Tests"
 
   # シミュレータを検索
@@ -308,6 +290,9 @@ fi
 
 # --- Build for Production (Archive) ---
 if [ "$run_archive" = true ]; then
+  # アーカイブ実行時にプロジェクトファイルを確認
+  ensure_project_file
+  
   step "Building for Production (Unsigned)"
 
   # アーカイブビルド
