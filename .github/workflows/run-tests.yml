@@ -53,8 +53,8 @@ jobs:
           echo "テスト用ビルドを実行します"
           mkdir -p "${{ github.workspace }}/ci-outputs/test-results"
           xcodebuild build-for-testing \
-            -project "TemplateApp.xcodeproj" \
-            -scheme "TemplateApp" \
+            -project "CounterApp.xcodeproj" \
+            -scheme "CounterApp" \
             -destination "platform=iOS Simulator,id=${{ steps.select_simulator.outputs.simulator_id }}" \
             -derivedDataPath "${{ github.workspace }}/ci-outputs/test-results/DerivedData" \
             -configuration Debug \
@@ -128,8 +128,8 @@ jobs:
           set -o pipefail
           echo "シミュレータ ID (${{ steps.select_simulator.outputs.simulator_id }}) を使用してユニットテストを実行します"
           xcodebuild test-without-building \
-            -project "TemplateApp.xcodeproj" \
-            -scheme "TemplateAppTests" \
+            -project "CounterApp.xcodeproj" \
+            -scheme "CounterAppTests" \
             -destination "platform=iOS Simulator,id=${{ steps.select_simulator.outputs.simulator_id }}" \
             -derivedDataPath "${{ github.workspace }}/ci-outputs/test-results/DerivedData" \
             -enableCodeCoverage NO \
@@ -194,8 +194,8 @@ jobs:
           set -o pipefail
           echo "シミュレータ ID (${{ steps.select_simulator.outputs.simulator_id }}) を使用して UI テストを実行します"
           xcodebuild test-without-building \
-            -project "TemplateApp.xcodeproj" \
-            -scheme "TemplateAppUITests" \
+            -project "CounterApp.xcodeproj" \
+            -scheme "CounterAppUITests" \
             -destination "platform=iOS Simulator,id=${{ steps.select_simulator.outputs.simulator_id }}" \
             -derivedDataPath "${{ github.workspace }}/ci-outputs/test-results/DerivedData" \
             -enableCodeCoverage NO \

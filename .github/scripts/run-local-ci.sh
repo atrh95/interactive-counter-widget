@@ -11,10 +11,10 @@ set -euo pipefail
 
 # === Configuration ===
 OUTPUT_DIR="ci-outputs"
-PROJECT_FILE="TemplateApp.xcodeproj"
-APP_SCHEME="TemplateApp"
-UNIT_TEST_SCHEME="TemplateAppTests"
-UI_TEST_SCHEME="TemplateAppUITests"
+PROJECT_FILE="CounterApp.xcodeproj"
+APP_SCHEME="CounterApp"
+UNIT_TEST_SCHEME="CounterAppTests"
+UI_TEST_SCHEME="CounterAppUITests"
 
 # === Default Flags ===
 run_unit_tests=false
@@ -114,8 +114,8 @@ find_existing_artifacts() {
   
   for path in "${search_paths[@]}"; do
     if [ -d "$path" ]; then
-      # findを使ってTemplateApp.appを検索
-      if find "$path" -name "TemplateApp.app" -type d | head -1 | grep -q "TemplateApp.app"; then
+      # findを使ってCounterApp.appを検索
+      if find "$path" -name "CounterApp.app" -type d | head -1 | grep -q "CounterApp.app"; then
         echo "Found existing build artifacts at: $path"
         # シンボリックリンクまたはコピーでアーティファクトを利用可能にする
         if [ "$path" != "$OUTPUT_DIR/test-results/DerivedData" ]; then

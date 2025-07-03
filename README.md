@@ -1,16 +1,21 @@
-# TemplateApp
+## 概要
 
-SwiftUI ベースの iOS アプリ用テンプレートです
+ホーム画面で操作できるカウンターウィジェットです。
 
-## カスタマイズの手順
+## 特徴
 
-1. project.yml  
-   - `name` → アプリ名  
-   - `bundleIdPrefix` → 固有のドメイン
-   - `MARKETING_VERSION` → バージョン  
-   - `IPHONEOS_DEPLOYMENT_TARGET` → 最小 OS バージョン
+- **インタラクティブウィジェット**: アプリを開かずにウィジェット上のボタンでデータを操作
+- **データの同期**: アプリとウィジェット間でデータの同期
 
-2. CI/CDの設定  
-   - `.github/workflows/`
-   - `.github/scripts/run-local-ci.sh`
-   - Xcode のバージョンを変更
+## 技術詳細
+
+- WidgetKit, App Intents, SwiftUI
+- iOS 17.0+
+- App Groups でデータ共有
+
+## ビルド
+
+```bash
+mint run xcodegen
+open CounterApp.xcodeproj
+```

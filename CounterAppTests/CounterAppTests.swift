@@ -1,5 +1,5 @@
-@testable import TemplateApp
 import XCTest
+@testable import CounterApp
 
 final class TemplateAppTests: XCTestCase {
     func testExample() {
