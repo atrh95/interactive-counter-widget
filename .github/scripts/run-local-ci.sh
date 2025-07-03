@@ -102,16 +102,6 @@ fail() {
   exit 1
 }
 
-# xcodeprojを必要に応じて生成する関数
-ensure_project_file() {
-  # プロジェクトファイルが存在しない場合は自動生成
-  if [ ! -d "$PROJECT_FILE" ]; then
-    step "Generating Xcode project using XcodeGen"
-    mint run xcodegen || fail "XcodeGen によるプロジェクト生成に失敗しました。"
-    success "Xcode project generated successfully."
-  fi
-}
-
 # アーティファクト検索関数
 find_existing_artifacts() {
   local search_paths=(
@@ -187,8 +177,6 @@ fi
 success "All required dependencies are available."
 
 if [ "$run_unit_tests" = true ] || [ "$run_ui_tests" = true ]; then
-  # テスト実行時にプロジェクトファイルを確認
-  ensure_project_file
   step "Running Tests"
 
   # シミュレータを検索
@@ -290,9 +278,6 @@ fi
 
 # --- Build for Production (Archive) ---
 if [ "$run_archive" = true ]; then
-  # アーカイブ実行時にプロジェクトファイルを確認
-  ensure_project_file
-  
   step "Building for Production (Unsigned)"
 
   # アーカイブビルド
