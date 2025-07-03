@@ -12,7 +12,6 @@ public class ICUserDefaultsManager {
     private let userDefaults: UserDefaults
 
     private init() {
-        // App Groupsを使用してデータを共有
         guard let userDefaults = UserDefaults(suiteName: Self.appGroupID) else {
             assertionFailure("App Group '\(Self.appGroupID)' にアクセスできません")
             self.userDefaults = UserDefaults.standard
@@ -21,7 +20,7 @@ public class ICUserDefaultsManager {
         self.userDefaults = userDefaults
     }
 
-    public func getValue(for key: Keys, defaultValue _: Int = 0) -> Int {
+    public func getValue(for key: Keys) -> Int {
         self.userDefaults.integer(forKey: key.rawValue)
     }
 
