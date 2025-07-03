@@ -1,4 +1,4 @@
-# mint run xcodegen
+# mint run xcodegen generate
 
 name: CounterApp
 options:

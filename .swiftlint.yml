@@ -10,9 +10,11 @@
 
 # Paths to include in linting
 included:
-  - TemplateApp/**/*.swift
-  - TemplateAppTests/**/*.swift
-  - TemplateAppUITests/**/*.swift
+  - CounterApp/**/*.swift
+  - CounterAppTests/**/*.swift
+  - CounterAppUITests/**/*.swift
+  - InteractiveCounterWidget/**/*.swift
+  - ICUserDefaultsManager/**/*.swift
 
 #-------------------------------------------------------------------
 # Analysis Targets
@@ -41,9 +43,9 @@ disabled_rules:
   - multiple_closures_with_trailing_closure # 複数のクロージャを持つ場合のトレイリングクロージャ構文を許可
   - function_body_length # 関数本体の長さ制限を無効化
   - type_body_length # 型定義の長さ制限を無効化
+  - empty_count # count プロパティの特定パターンが誤検出されるため無効化
 
 opt_in_rules:
-  - empty_count # count == 0 の代わりに isEmpty を使用
   - force_unwrapping # 強制アンラップを禁止
   - sorted_imports # importを整列
   - vertical_whitespace # 垂直方向の空白行を整理

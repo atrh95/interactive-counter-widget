@@ -1,57 +1,55 @@
-import SwiftUI
 import ICUserDefaultsManager
+import SwiftUI
+import WidgetKit
 
 struct ContentView: View {
-    @StateObject private var counter = ICUserDefaultsManager.shared
-    
-    var body: some View {
-        VStack(spacing: 30) {
-            Text("Counter App")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text("\(counter.count)")
-                .font(.system(size: 80, weight: .bold, design: .rounded))
-                .foregroundColor(.blue)
-            
-            HStack(spacing: 20) {
-                Button("-") {
-                    counter.decrement()
-                }
-                .font(.title)
-                .frame(width: 60, height: 60)
-                .background(Color.red)
-                .foregroundColor(.white)
-                .clipShape(Circle())
-                
-                Button("Reset") {
-                    counter.reset()
-                }
-                .font(.title3)
-                .frame(width: 80, height: 60)
-                .background(Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-                
-                Button("+") {
-                    counter.increment()
-                }
-                .font(.title)
-                .frame(width: 60, height: 60)
-                .background(Color.green)
-                .foregroundColor(.white)
-                .clipShape(Circle())
-            }
-            
-            Text("ウィジェットからカウンターを操作できます")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding()
-    }
-}
+    @AppStorage(
+        ICUserDefaultsManager.Keys.counterValue.rawValue,
+        store: UserDefaults(suiteName: ICUserDefaultsManager.appGroupID)
+    )
+    private var count: Int = 0
 
-#Preview {
-    ContentView()
+    var body: some View {
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                HStack(spacing: 50) {
+                    Button {
+                        if self.count > 0 {
+                            self.count -= 1
+                            WidgetCenter.shared.reloadTimelines(ofKind: "InteractiveCounterWidget")
+                        }
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(self.count <= 0 ? .gray : .accentColor)
+                            .frame(width: 60, height: 60)
+                    }
+                    .disabled(self.count <= 0)
+
+                    Text("\(self.count)")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.gray)
+                        .frame(height: 40)
+
+                    Button {
+                        if self.count < 50 {
+                            self.count += 1
+                            WidgetCenter.shared.reloadTimelines(ofKind: "InteractiveCounterWidget")
+                        }
+                    } label: {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(self.count >= 50 ? .gray : .accentColor)
+                            .frame(width: 60, height: 60)
+                    }
+                    .disabled(self.count >= 50)
+                }
+                Spacer()
+            }
+            .frame(width: geometry.size.width, height: 120)
+        }
+        .frame(height: 120)
+        .navigationTitle("Counter")
+    }
 }
