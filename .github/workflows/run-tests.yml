@@ -62,8 +62,6 @@ jobs:
   unit-test:
     runs-on: macos-latest
     needs: build-for-testing
-    outputs:
-      result: ${{ steps.unit_tests.outcome }}
     steps:
       - uses: actions/checkout@v4
 
@@ -117,8 +115,6 @@ jobs:
   ui-test:
     runs-on: macos-latest
     needs: build-for-testing
-    outputs:
-      result: ${{ steps.ui_tests.outcome }}
     steps:
       - uses: actions/checkout@v4
 
